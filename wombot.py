@@ -3,7 +3,7 @@
 import chatango
 import asyncio
 from aiohttp import ClientSession
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 import aiocron
 import random
 import typing
@@ -1635,6 +1635,21 @@ class MyBot(chatango.Client):
                         + "! "
                         + random.choice(shoutend)
                     )
+
+            elif cmd in ["chuntdate"]:
+                if message.room.name != '<PM>':
+                    await message.room.delete_message(message)
+
+                if args:
+                    splitargs = args.split(" ")
+                    try:
+                        daysSinceEpoch = splitargs[0]
+                        epoch = datetime.strptime("14/03/2022", "%d/%m/%y")
+                        date = epoch + timedelta(days=float(daysSinceEpoch))
+                        answer = "Day " + daysSinceEpoch + " of chunting will be " + date.strftime("%d/%m/%y") + ". Praise be!"
+                        await message.channel.send(answer)
+                    except Exception:
+                        await message.channel.send("To calculate the i-th day of chunting, try !chuntdate i")
 
             else:
                 print(cmd)
